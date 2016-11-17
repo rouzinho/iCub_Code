@@ -1,0 +1,178 @@
+<application>
+    <name>ERA</name>
+    <description>Modified Version Of Tony Morse</description>
+    <version>1.0</version>
+
+    <module>
+        <name>iCubMotor</name>
+	<parameters>--robot icub --start</parameters>
+        <node>localhost</node>
+    </module>
+
+    <module>
+        <name>tracker</name>
+	<parameters>--robot icub --camCalib 0 --threshold 50 --saturation 18 --maxObjectSize 95 --minObjectSize 20 --saturationMask 0 --strictObjectDetection 1 --rightCam 0 --start</parameters>
+        <node>localhost</node>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 100 --y 100</parameters>
+        <node>localhost</node>
+        <prefix>/LeftView</prefix>
+    </module>
+
+    <!--<module>
+        <name></name>
+	<parameters>--robot icubSim --start</parameters>
+        <node>localhost</node>
+    </module>-->
+
+    <module>
+        <name>/home/icub/poeticon/src/blobDescriptor/bin/blobDescriptor</name>
+        <node>localhost</node>
+    </module>
+
+
+
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 400 --y 100</parameters>
+        <node>localhost</node>
+        <prefix>/binaryImage</prefix>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 100 --y 425</parameters>
+        <node>localhost</node>
+        <prefix>/leftMotionView</prefix>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 400 --y 425</parameters>
+        <node>localhost</node>
+        <prefix>/SequentialImage</prefix>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 700 --y 100</parameters>
+        <node>localhost</node>
+        <prefix>/ERA</prefix>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--x 700 --y 425</parameters>
+        <node>localhost</node>
+        <prefix>/blobDescriptor</prefix>
+    </module>
+
+
+
+    <connection>
+        <from>/tracker/0/cam/left:o</from>
+        <to>/LeftView/yarpview/img:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/binaryImage:o</from>
+        <to>/binaryImage/yarpview/img:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/motion/left:o</from>
+        <to>/leftMotionView/yarpview/img:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/sequentialImage:o</from>
+        <to>/SequentialImage/yarpview/img:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/era/cam/left:o</from>
+        <to>/ERA/yarpview/img:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/blobDescriptor/viewImg:o</from>
+        <to>/era/cam/left:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/icub/head/state:o</from>
+        <to>/era/head:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/cam/left:o</from>
+        <to>/blobDescriptor/rawImg:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/binaryImage:o</from>
+        <to>/blobDescriptor/binImg:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/blobDescriptor/binImg:o</from>
+        <to>/ERA/0/</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/tracker/0/sequentialImage:o</from>
+        <to>/blobDescriptor/labeledImg:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/blobDescriptor/affDescriptor:o</from>
+        <to>/era/attribute:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/era/move:o</from>
+        <to>/iCubMotor/0:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/iCubMotor/0/point:o</from>
+        <to>/cart</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/era/speech:o</from>
+        <to>/talk</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/speech</from>
+        <to>/era/speech:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/era/0/praxicon:o</from>
+        <to>/praxInterface/speech:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+</application>
