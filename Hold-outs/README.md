@@ -3,4 +3,4 @@ The purpose is to use reinforcement learning to learn taking object and place th
 Then I will use Transfer Learning to transfer the skill of placing the object to a pointing gesture.
 
 Unfortunatly, the work is not in progress anymore.
-Video of the set up experiment in this smae folder.
+Video of the set up experiment in this current folder.
